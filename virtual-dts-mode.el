@@ -159,6 +159,7 @@
   ;; Generate the equivalent `dts' for the current `dtb' buffer and switch to it
   (switch-to-buffer (virtual-dts-buffer (buffer-file-name (current-buffer)))))
 
+;;;###autoload
 (define-derived-mode virtual-dts-mode
   dts-mode "Devicetree (virtual)"
   "Major mode for viewing the equivalent `dts' for a `dtb' file."
