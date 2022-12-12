@@ -1,7 +1,9 @@
-{ pkgs ? import <nixpkgs> { } }:
+{ pkgs ? import <nixpkgs> { }
+, system ? builtins.currentSystem
+, devshell ? import (fetchTarball "https://github.com/numtide/devshell/archive/master.tar.gz") { inherit system; }
+}:
 let
   inherit (pkgs)
-    mkShell
     writeShellApplication
     pandoc
     jq
@@ -41,8 +43,19 @@ let
     '';
   };
 in
-mkShell {
-  buildInputs = [
-    update-readme
+devshell.mkShell {
+  commands = [
+    {
+      name = "cachix-develop";
+      category = "utils";
+      command = "cachix watch-exec virtual-dts-mode nix -- develop";
+      help = "Build devshell and push to cachix";
+    }
+    {
+      name = "update-readme";
+      category = "utils";
+      package = update-readme;
+      help = "Convert the README.org to HTML and update the sourcehut README";
+    }
   ];
 }

@@ -5,21 +5,14 @@
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
   outputs = { self, flake-utils, devshell, nixpkgs }:
-    flake-utils.lib.eachDefaultSystem (system: {
-      devShells = {
-        default =
-          let
-            pkgs = import nixpkgs {
-              inherit system;
-
-              overlays = [ devshell.overlay ];
-            };
-          in
-          pkgs.devshell.mkShell {
-            imports = [ (pkgs.devshell.importTOML ./devshell.toml) ];
-          };
-      };
-    });
+    flake-utils.lib.eachDefaultSystem (system:
+      let pkgs = import nixpkgs { inherit system; overlays = [ devshell.overlay ]; };
+      in
+      {
+        devShells = {
+          default = pkgs.callPackage ./shell.nix { };
+        };
+      });
 
   # Automatic nix.conf settings (accepted automatically when 'accept-flake-config = true')
   nixConfig = {
