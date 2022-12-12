@@ -96,6 +96,62 @@
     ;; Return the `dts' buffer
     dts-buffer))
 
+(defun virtual-dts-to-dtb (buffer)
+  "Convert a `dts' FILE back to a `dtb' buffer."
+  ;; Invoke `dtc', ensuring all output is read
+  (let* ((dtb-base-name (file-name-base (buffer-file-name buffer)))
+         (dts-buffer (get-buffer-create (format "*%s.dts" dtb-base-name)))
+         (stdout (generate-new-buffer (format "*%s.dts<stdout>" dtb-base-name)))
+         (stderr (generate-new-buffer (format "*%s.dts<stderr>" dtb-base-name)))
+         (process (make-process :name "dtc"
+                                :command (append (list "dtc" "-@" "-I" "dtb" "-O" "dts" "-"))
+                                :stdin (file-local-name (buffer-file-name dts-buffer))
+                                :buffer stdout
+                                :stderr stderr
+                                :file-handler (lambda (process output)
+                                                (with-current-buffer (process-buffer process)
+                                                  (insert output)))))
+         (stderr-process (get-buffer-process stderr)))
+
+    (with-current-buffer buffer (process-send-region process (point-min) (point-max)))
+
+    ;; Don't include the "Process <name> finished" messages
+    (set-process-sentinel process (lambda (process event) (message "Process %s has terminated: %s" process event)))
+    (set-process-sentinel stderr-process (lambda (process event) (message "Process %s has terminated: %s" process event)))
+
+    (unless (and process stderr-process) (error "Process unexpectedly nil"))
+    (while (accept-process-output process))
+    (while (accept-process-output stderr-process))
+
+    ;; Ensure `read-only-mode' is off, and clear `dts-buffer' output from previous runs
+    (with-current-buffer dts-buffer (read-only-mode 0) (erase-buffer))
+
+    ;; Append `stdout' to `dts-buffer'
+    (with-current-buffer stdout (append-to-buffer dts-buffer (point-min) (point-max)))
+
+    ;; Append contents of `dtc-buffer' to `dts-buffer'
+    (with-current-buffer stderr
+      ;; Prepend `//' (comment) to each line of stderr from `dtc'
+      (save-excursion
+        (goto-char (point-min))
+        (insert "\n")
+        (while (not (eobp))
+          (beginning-of-line)
+          (insert "// ")
+          (forward-line 1)))
+
+      ;; Append the `dtc' warnings to `dts-buffer' as comments
+      (append-to-buffer dts-buffer (point-min) (point-max)))
+
+    ;; Delete the intermediate 'stdout' and `stderr' buffers
+    (kill-buffer stdout)
+    (kill-buffer stderr)
+
+    ;; Return the `dts' buffer
+    dts-buffer))
+
+(with-current-buffer (get-file-buffer "pl-final-new.dtbo") (virtual-dts-to-dtb (current-buffer)))
+
 (defun virtual-dts ()
   "Decompile then view the equivalent `dts' for the current buffer."
   (interactive)
