@@ -18,11 +18,15 @@ tasks:
   - show: |
       cd virtual-dts-mode
       $NIX --print-build-logs flake show
+  - check: |
+      cd virtual-dts-mode
+      $NIX --print-build-logs flake check
   - readme: |
       cd virtual-dts-mode
       echo "Updating README"
       $NIX --print-build-logs develop .#devShells.x86_64-linux.default -c update-readme
       echo "Updated README"
-  - check: |
+  - mirror-to-github: |
       cd virtual-dts-mode
-      $NIX --print-build-logs flake check
+      git remote add github git@github.com:connorfeeley/virtual-dts-mode.git
+      git push --prune github +refs/remotes/origin/*:refs/heads/* +refs/tags/*:refs/tags/*
