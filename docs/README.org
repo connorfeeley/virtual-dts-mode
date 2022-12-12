@@ -12,7 +12,6 @@ The ~dts~-representation of files are currently displayed read-only.
 Being able to propagate edits back to the source ~dtb~ file (by invoking ~dtc~ again) would be useful when debugging device tree problems (ideally, directly on the target device).
 
 ** License
-
 #+begin_quote
 MIT License
 
@@ -24,3 +23,5 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #+end_quote
+* Homepage
+/Note: this repository is mirrored to [[https://github.com/connorfeeley/virtual-dts-mode][GitHub]], though the canonical location is on [[https://sr.ht/~cfeeley/virtual-dts-mode/][Sourcehut]]./
