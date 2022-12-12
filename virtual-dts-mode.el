@@ -75,7 +75,7 @@
     ;; Append `stdout' to `dts-buffer'
     (with-current-buffer stdout (append-to-buffer dts-buffer (point-min) (point-max)))
 
-    ;; Append contents of `dtc-buffer' to `dts-buffer'
+    ;; Append contents of `stderr' to `dts-buffer'
     (with-current-buffer stderr
       ;; Prepend `//' (comment) to each line of stderr from `dtc'
       (save-excursion
