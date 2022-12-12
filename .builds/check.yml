@@ -18,9 +18,6 @@ tasks:
   - show: |
       cd virtual-dts-mode
       $NIX --print-build-logs flake show
-  - devshell: |
-      cd virtual-dts-mode
-      $NIX --print-build-logs build .#devShell.x86_64-linux
   - readme: |
       cd virtual-dts-mode
       echo "Updating README"
