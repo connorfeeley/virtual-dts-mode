@@ -18,7 +18,5 @@
   # Automatic nix.conf settings (accepted automatically when 'accept-flake-config = true')
   nixConfig = {
     extra-experimental-features = "nix-command flakes";
-    extra-substituters = [ "https://virtual-dts-mode.cachix.org" ];
-    extra-trusted-public-keys = [ "virtual-dts-mode.cachix.org-1:yrlePU8YmjBgLD4tK5wPeMrTKeRLSPKmSnbndRgksIE=" ];
   };
 }
