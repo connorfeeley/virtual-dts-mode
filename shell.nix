@@ -18,7 +18,7 @@ let
       # Generate a personal access token and export it as PRIVATE_BEARER_TOKEN:
       [ -e /tmp/dotfield-readme-update-access-token.txt ] && bearer_token="$(cat /tmp/dotfield-readme-update-access-token.txt)"
 
-      pandoc README.org -f org -t gfm -o /tmp/README.md --table-of-contents -s
+      pandoc docs/README.org -f org -t gfm -o /tmp/README.md --table-of-contents -s
       pandoc /tmp/README.md -f gfm -t html5 -o /tmp/README.html
 
       repo_id=234254
