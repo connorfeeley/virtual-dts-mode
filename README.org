@@ -1,10 +1,17 @@
 #+title: README
 #+author: Connor Feeley
 #+date: 2022-12-11
+#+embed: LICENCE :description MIT licence file
 * ~virtual-dts-mode~
 This package provides an auto major mode to view device tree binary files by decompiling them into their equivalent device tree source files.
 
-* License
+** Future Work
+*** "Live" edit mode
+The ~dts~-representation of files are currently displayed read-only.
+
+Being able to propagate edits back to the source ~dtb~ file (by invoking ~dtc~ again) would be useful when debugging device tree problems (ideally, directly on the target device).
+
+** License
 
 #+begin_quote
 MIT License
