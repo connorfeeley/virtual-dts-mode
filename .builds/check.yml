@@ -21,7 +21,7 @@ tasks:
   - readme: |
       cd virtual-dts-mode
       echo "Updating README"
-      $NIX --print-build-logs develop .#devShell.x86_64-linux -c update-readme
+      $NIX --print-build-logs develop .#devShells.x86_64-linux.default -c update-readme
       echo "Updated README"
   - check: |
       cd virtual-dts-mode

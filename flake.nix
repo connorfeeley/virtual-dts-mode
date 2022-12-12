@@ -9,8 +9,9 @@
       let pkgs = import nixpkgs { inherit system; overlays = [ devshell.overlay ]; };
       in
       {
-        devShells = {
-          default = pkgs.callPackage ./shell.nix { };
+        devShells = rec {
+          default = readme;
+          readme = pkgs.callPackage ./shell.nix { };
         };
       });
 
