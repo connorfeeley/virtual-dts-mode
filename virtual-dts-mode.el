@@ -137,8 +137,11 @@
     (message "Accepting process stderr output")
     (while (accept-process-output stderr-process 1))
 
+    (delete-process process)
+    (delete-process stderr-process)
+
     ;; Ensure `read-only-mode' is off, and clear `dtb-buffer' output from previous runs
-    ;; (with-current-buffer dtb-buffer (read-only-mode 0) (erase-buffer))
+    (with-current-buffer dtb-buffer (read-only-mode 0) (erase-buffer))
 
     ;; Append `stdout' to `dtb-buffer'
     (with-current-buffer stdout (append-to-buffer dtb-buffer (point-min) (point-max)))
@@ -149,9 +152,6 @@
     ;; Delete the intermediate 'stdout' and `stderr' buffers
     (kill-buffer stdout)
     (kill-buffer stderr)
-
-    (delete-process process)
-    (delete-process stderr-process)
 
     ;; Return the `dtb' buffer
     (message "dtb-buffer: %s (%s)" dtb-buffer (buffer-size dtb-buffer))
@@ -174,16 +174,21 @@
 
 (defun virtual-dts-to-dtb-before-save ()
   "Convert a `dts' representation of a `dtb' back to binary format before saving."
-  (erase-buffer)
-  (insert-file-contents (buffer-file-name))
-  (set-buffer-modified-p nil)
-  (read-only-mode nil)
+  ;; (erase-buffer)
+  ;; (insert-file-contents (buffer-file-name))
+  ;; (set-buffer-modified-p nil)
+  ;; (read-only-mode nil)
   (let ((inhibit-read-only t)
         (coding-system-for-write 'binary)
+        (buffer-file-coding-system 'binary)
         (dtb-buffer (virtual-dts-to-dtb (current-buffer)))
         )
-    (erase-buffer)
-    (insert-buffer-substring dtb-buffer)
+    (with-current-buffer (current-buffer)
+
+      (replace-buffer-contents dtb-buffer)
+      ;; (erase-buffer)
+      ;; (insert-buffer-substring dtb-buffer)
+      (set-buffer-modified-p t))
     ))
 
 ;;;###autoload
