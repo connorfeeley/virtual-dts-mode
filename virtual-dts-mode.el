@@ -76,12 +76,12 @@
     (with-current-buffer stdout (append-to-buffer dts-buffer (point-min) (point-max)))
 
     (with-current-buffer stderr
-      ;; Show a message (unlikely) or popup buffer (likely) with the `dtc' stderr
-      (display-message-or-buffer (buffer-string))
-
       ;; Append contents of `stderr' to `dts-buffer'
       ;; Prepend `//' (comment) to each line of stderr from `dtc'
       (save-excursion
+        ;; Show a message (unlikely) or popup buffer (likely) with the `dtc' stderr
+        (display-message-or-buffer (buffer-string))
+
         (goto-char (point-min))
         (insert "\n")
         (while (not (eobp))
@@ -147,7 +147,7 @@
     (with-current-buffer stdout (append-to-buffer dtb-buffer (point-min) (point-max)))
 
     ;; Show a message (unlikely) or popup buffer (likely) with the `dtc' stderr
-    (with-current-buffer stderr (display-message-or-buffer (buffer-string)))
+    (with-current-buffer stderr (save-excursion (display-message-or-buffer (buffer-string))))
 
     ;; Delete the intermediate 'stdout' and `stderr' buffers
     (kill-buffer stdout)
@@ -174,6 +174,12 @@
 
 (defun virtual-dts-to-dtb-before-save ()
   "Convert a `dts' representation of a `dtb' back to binary format before saving."
+  ;; Protect against I/O errors
+  (setq-local file-precious-flag t)
+
+  ;; Set a variable used to restore the position in the `after-save-hook'
+  (setq virtual-dts-saved-position (point))
+
   ;; (erase-buffer)
   ;; (insert-file-contents (buffer-file-name))
   ;; (set-buffer-modified-p nil)
@@ -185,11 +191,22 @@
         )
     (with-current-buffer (current-buffer)
 
+      (setq-local last-coding-system-used 'binary)
       (replace-buffer-contents dtb-buffer)
       ;; (erase-buffer)
       ;; (insert-buffer-substring dtb-buffer)
       (set-buffer-modified-p t))
-    ))
+    )
+  nil)
+
+(defun virtual-dts-to-dtb-after-save ()
+  "Restore the buffer position and mode after saving."
+
+  ;; Restore the position saved in the `before-save-hook'
+  (with-current-buffer (current-buffer)
+    (virtual-dts-mode)
+    (goto-char virtual-dts-saved-position))
+  )
 
 ;;;###autoload
 (define-derived-mode virtual-dts-mode
@@ -202,7 +219,9 @@
     (read-only-mode 1))
 
   (add-hook 'change-major-mode-hook #'virtual-dts-mode-exit nil t)
-  (add-hook 'write-file-functions #'virtual-dts-to-dtb-before-save nil t))
+  (add-hook 'write-file-functions #'virtual-dts-to-dtb-before-save nil t)
+  (add-hook 'after-save-hook #'virtual-dts-to-dtb-after-save nil t)
+  )
 
 (defun virtual-dts-mode-exit ()
   "Restore virtual-dts-mode when switching to another mode."
