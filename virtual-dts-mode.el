@@ -115,9 +115,10 @@
                                 :stderr stderr
                                 :coding 'binary
                                 :connection-type 'pipe
-                                :file-handler (lambda (process output)
-                                                (with-current-buffer (process-buffer process)
-                                                  (insert output)))))
+                                ;; :file-handler (lambda (process output)
+                                ;;                 (with-current-buffer (process-buffer process)
+                                ;;                   (insert output)))
+                                ))
          (stderr-process (get-buffer-process stderr)))
 
     ;; Don't include the "Process <name> finished" messages
@@ -149,6 +150,9 @@
     (kill-buffer stdout)
     (kill-buffer stderr)
 
+    (delete-process process)
+    (delete-process stderr-process)
+
     ;; Return the `dtb' buffer
     (message "dtb-buffer: %s (%s)" dtb-buffer (buffer-size dtb-buffer))
     dtb-buffer))
@@ -170,11 +174,16 @@
 
 (defun virtual-dts-to-dtb-before-save ()
   "Convert a `dts' representation of a `dtb' back to binary format before saving."
-  (buffer-file-name (current-buffer))
-  (let* ((coding-system-for-write 'binary)
-         (dtb-file (concat (buffer-file-name) ".TEST"))
-         (dtb-buffer (virtual-dts-to-dtb (current-buffer))))
-    (with-current-buffer dtb-buffer (write-file (buffer-file-name) nil))
+  (erase-buffer)
+  (insert-file-contents (buffer-file-name))
+  (set-buffer-modified-p nil)
+  (read-only-mode nil)
+  (let ((inhibit-read-only t)
+        (coding-system-for-write 'binary)
+        (dtb-buffer (virtual-dts-to-dtb (current-buffer)))
+        )
+    (erase-buffer)
+    (insert-buffer-substring dtb-buffer)
     ))
 
 ;;;###autoload
