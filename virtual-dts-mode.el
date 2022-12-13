@@ -132,9 +132,9 @@
 
     (unless (and process stderr-process) (error "Process unexpectedly nil"))
     (message "Accepting process output")
-    (while (accept-process-output process))
+    (while (accept-process-output process 1))
     (message "Accepting process stderr output")
-    (while (accept-process-output stderr-process))
+    (while (accept-process-output stderr-process 1))
 
     ;; Ensure `read-only-mode' is off, and clear `dtb-buffer' output from previous runs
     ;; (with-current-buffer dtb-buffer (read-only-mode 0) (erase-buffer))
@@ -168,6 +168,15 @@
   ;; Generate the equivalent `dts' for the current `dtb' buffer and switch to it
   (switch-to-buffer (virtual-dts-buffer (buffer-file-name (current-buffer)))))
 
+(defun virtual-dts-to-dtb-before-save ()
+  "Convert a `dts' representation of a `dtb' back to binary format before saving."
+  (buffer-file-name (current-buffer))
+  (let* ((coding-system-for-write 'binary)
+         (dtb-file (concat (buffer-file-name) ".TEST"))
+         (dtb-buffer (virtual-dts-to-dtb (current-buffer))))
+    (with-current-buffer dtb-buffer (write-file (buffer-file-name) nil))
+    ))
+
 ;;;###autoload
 (define-derived-mode virtual-dts-mode
   dts-mode "Devicetree (virtual)"
@@ -178,7 +187,8 @@
     (set-buffer-modified-p nil)
     (read-only-mode 1))
 
-  (add-hook 'change-major-mode-hook #'virtual-dts-mode-exit nil t))
+  (add-hook 'change-major-mode-hook #'virtual-dts-mode-exit nil t)
+  (add-hook 'write-file-functions #'virtual-dts-to-dtb-before-save nil t))
 
 (defun virtual-dts-mode-exit ()
   "Restore virtual-dts-mode when switching to another mode."
