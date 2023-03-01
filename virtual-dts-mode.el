@@ -169,14 +169,6 @@
     (message "dtb-buffer: %s (%s)" dtb-buffer (buffer-size dtb-buffer))
     dtb-buffer))
 
-;; (with-current-buffer (get-buffer "base.dts")
-;;   (buffer-file-name (current-buffer))
-;;   (let* ((dtb-file (concat (buffer-file-name) ".TEST"))
-;;          (dtb-buffer (virtual-dts-to-dtb (current-buffer)))
-;;          (coding-system-for-write 'binary))
-;;     (with-current-buffer dtb-buffer (write-file dtb-file nil))
-;;     ))
-
 (defun virtual-dts ()
   "Decompile then view the equivalent `dts' for the current buffer."
   (interactive)
@@ -192,23 +184,15 @@
   ;; Set a variable used to restore the position in the `after-save-hook'
   (setq virtual-dts-saved-position (point))
 
-  ;; (erase-buffer)
-  ;; (insert-file-contents (buffer-file-name))
-  ;; (set-buffer-modified-p nil)
-  ;; (read-only-mode nil)
   (let ((inhibit-read-only t)
         (coding-system-for-write 'binary)
         (buffer-file-coding-system 'binary)
-        (dtb-buffer (virtual-dts-to-dtb (current-buffer)))
-        )
+        (dtb-buffer (virtual-dts-to-dtb (current-buffer))))
     (with-current-buffer (current-buffer)
 
       (setq-local last-coding-system-used 'binary)
       (replace-buffer-contents dtb-buffer)
-      ;; (erase-buffer)
-      ;; (insert-buffer-substring dtb-buffer)
-      (set-buffer-modified-p t))
-    )
+      (set-buffer-modified-p t)))
   nil)
 
 (defun virtual-dts-to-dtb-after-save ()
@@ -217,8 +201,7 @@
   ;; Restore the position saved in the `before-save-hook'
   (with-current-buffer (current-buffer)
     (virtual-dts-mode)
-    (goto-char virtual-dts-saved-position))
-  )
+    (goto-char virtual-dts-saved-position)))
 
 ;;;###autoload
 (define-derived-mode virtual-dts-mode
@@ -232,8 +215,7 @@
 
   (add-hook 'change-major-mode-hook #'virtual-dts-mode-exit nil t)
   (add-hook 'write-file-functions #'virtual-dts-to-dtb-before-save nil t)
-  (add-hook 'after-save-hook #'virtual-dts-to-dtb-after-save nil t)
-  )
+  (add-hook 'after-save-hook #'virtual-dts-to-dtb-after-save nil t))
 
 (defun virtual-dts-mode-exit ()
   "Restore virtual-dts-mode when switching to another mode."
