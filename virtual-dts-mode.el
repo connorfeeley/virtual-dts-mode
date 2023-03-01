@@ -44,6 +44,18 @@
 ;;
 ;;; Code:
 
+;;; ----------------------------------------------------------------------------
+;;; Customization options
+;;; ----------------------------------------------------------------------------
+(defgroup virtual-dts nil
+  "Control TP-Link Kasa smart home devices."
+  :prefix "virtual-dts-"
+  :group 'hardware)
+(defcustom virtual-dts-show-stderr nil
+  "If the standard error output of `dtc' should be displayed."
+  :type 'boolean
+  :group 'virtual-dts)
+
 (defun virtual-dts-buffer (file)
   "Convert a `dtb' FILE to a `dts' buffer."
   ;; Invoke `dtc', ensuring all output is read
@@ -80,7 +92,7 @@
       ;; Prepend `//' (comment) to each line of stderr from `dtc'
       (save-excursion
         ;; Show a message (unlikely) or popup buffer (likely) with the `dtc' stderr
-        (display-message-or-buffer (buffer-string))
+        (when virtual-dts-show-stderr (display-message-or-buffer (buffer-string)))
 
         (goto-char (point-min))
         (insert "\n")
@@ -147,7 +159,7 @@
     (with-current-buffer stdout (append-to-buffer dtb-buffer (point-min) (point-max)))
 
     ;; Show a message (unlikely) or popup buffer (likely) with the `dtc' stderr
-    (with-current-buffer stderr (save-excursion (display-message-or-buffer (buffer-string))))
+    (with-current-buffer stderr (save-excursion (when virtual-dts-show-stderr (display-message-or-buffer (buffer-string)))))
 
     ;; Delete the intermediate 'stdout' and `stderr' buffers
     (kill-buffer stdout)
