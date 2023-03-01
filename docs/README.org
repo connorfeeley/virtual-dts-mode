@@ -5,6 +5,37 @@
 * ~virtual-dts-mode~
 This package provides an auto major mode to view device tree binary files by decompiling them into their equivalent device tree source files.
 
+** Features
+- Transparantly convert device tree binary (~dtb~, ~dtbo~) files between their device tree source (~dts~) representations.
+- Bidirectional conversion on open and save:
+  + Supports converting from /binary representation/ to /source representation/ (~dtb~ -> ~dts~)
+  + On save, that source representation is automatically converted back to the binary representation (~dts~ -> ~dtb~).
+- Works over TRAMP.
+  + Allows editing a device tree directly on a target via SSH, automatically converting the device tree between binary and source representations as needed.
+
+** Requirements
+- Emacs ~26.1+~ (latest tested: ~30.0.50~).
+- The [[device tree compiler][https://github.com/dgibson/dtc]], ~dtc~.
+  + When ~virtual-dts-mode~ is used over TRAMP, ~dtc~ must be available on the target system.
+
+** Install
+*** ~straight~ + ~use-package~
+#+begin_src emacs-lisp :tangle no
+(use-package virtual-dts-mode
+  :straight (:host github :repo "connorfeeley/virtual-dts-mode"))
+#+end_src
+
+*** Doom Emacs
+Add to your ~packages.el~:
+#+begin_src emacs-lisp :tangle no
+(package! virtual-dts-mode
+  :recipe (:host github :repo "connorfeeley/virtual-dts-mode"))
+#+end_src
+
+Add to your ~config.el~:
+#+begin_src emacs-lisp :tangle no
+(use-package! virtual-dts-mode)
+#+end_src
 
 ** License
 #+begin_quote
@@ -18,5 +49,11 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #+end_quote
+
+* Contributing / Issues
+Contributions and bug reports are welcome! Either the [[https://github.com/connorfeeley/virtual-dts-mode][GitHub]] mirror or the [[https://sr.ht/~cfeeley/virtual-dts-mode/][Sourcehut]] project can be used.
+
+If you find this package useful, I'd love to hear it - feel free to open an issue or drop me a line at ~<most common VCS tool>@cfeeley.org~.
+
 * Homepage
-/Note: this repository is mirrored to [[https://github.com/connorfeeley/virtual-dts-mode][GitHub]], though the canonical location is on [[https://sr.ht/~cfeeley/virtual-dts-mode/][Sourcehut]]./
+/Note: this repository is automatically mirrored to [[https://github.com/connorfeeley/virtual-dts-mode][GitHub]], though the canonical location is at [[https://sr.ht/~cfeeley/virtual-dts-mode/][Sourcehut]]./
