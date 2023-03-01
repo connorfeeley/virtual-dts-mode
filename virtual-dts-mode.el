@@ -1,12 +1,12 @@
 ;;; virtual-dts-mode.el --- Major mode for Device Tree binary files  -*- lexical-binding: t; -*-
 ;;
-;; Copyright (C) 2022 Connor Feeley
+;; Copyright (©) 2022 Connor Feeley <git@cfeeley.org>
 ;;
 ;; Author: Connor Feeley <git@cfeeley.org>
 ;; Maintainer: Connor Feeley <git@cfeeley.org>
 ;; Created: December 8, 2022
-;; Modified: December 10, 2022
-;; Version: 0.2.1
+;; Modified: February 28, 2023
+;; Version: 1.0.0
 ;; Keywords: dts, languages, tools, unix, hardware
 ;; Homepage: https://sr.ht/~cfeeley/virtual-dts-mode/
 ;; Package-Requires: ((emacs "26.1") (dts-mode "1.0"))
