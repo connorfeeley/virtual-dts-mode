@@ -5,16 +5,6 @@
 * ~virtual-dts-mode~
 This package provides an auto major mode to view device tree binary files by decompiling them into their equivalent device tree source files.
 
-** Future Work
-*** STRT "Live" edit mode
-The ~dts~-representation of files are currently displayed read-only.
-
-Being able to propagate edits back to the source ~dtb~ file (by invoking ~dtc~ again) would be useful when debugging device tree problems (ideally, directly on the target device).
-
-Relevant info pages:
-#+begin_quote
-elisp -> Files -> Format Conversion -> Format Conversion Round-Trip
-#+end_quote
 
 ** License
 #+begin_quote
