@@ -15,7 +15,7 @@ This package provides an auto major mode to view device tree binary files by dec
 
 ** Requirements
 - Emacs ~26.1+~ (latest tested: ~30.0.50~).
-- The [[device tree compiler][https://github.com/dgibson/dtc]], ~dtc~.
+- The [[https://github.com/dgibson/dtc][device tree compiler]], ~dtc~.
   + When ~virtual-dts-mode~ is used over TRAMP, ~dtc~ must be available on the target system.
 
 ** Install
@@ -53,7 +53,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 * Contributing / Issues
 Contributions and bug reports are welcome! Either the [[https://github.com/connorfeeley/virtual-dts-mode][GitHub]] mirror or the [[https://sr.ht/~cfeeley/virtual-dts-mode/][Sourcehut]] project can be used.
 
-If you find this package useful, I'd love to hear it - feel free to open an issue or drop me a line at ~<most common VCS tool>@cfeeley.org~.
+If you find this package useful, I'd love to hear it - feel free to open an issue or drop me a line at ~git@cfeeley.org~.
 
 * Homepage
 /Note: this repository is automatically mirrored to [[https://github.com/connorfeeley/virtual-dts-mode][GitHub]], though the canonical location is at [[https://sr.ht/~cfeeley/virtual-dts-mode/][Sourcehut]]./
