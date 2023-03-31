@@ -62,6 +62,7 @@ Value is used when calling `read-only-mode'. See `read-only-mode' for supported 
   :type 'boolean
   :group 'virtual-dts)
 
+;;;###autoload
 (defun virtual-dts-buffer (file)
   "Convert a `dtb' FILE to a `dts' buffer."
   ;; Invoke `dtc', ensuring all output is read
@@ -117,7 +118,7 @@ Value is used when calling `read-only-mode'. See `read-only-mode' for supported 
     ;; Return the `dts' buffer
     dts-buffer))
 
-;; TODO: `TO-FN' in `format-alist'?
+;;;###autoload
 (defun virtual-dts-to-dtb (buffer)
   "Convert a `dts' FILE back to a `dtb' buffer."
   ;; Invoke `dtc', ensuring all output is read
@@ -172,6 +173,7 @@ Value is used when calling `read-only-mode'. See `read-only-mode' for supported 
     (message "dtb-buffer: %s (%s)" dtb-buffer (buffer-size dtb-buffer))
     dtb-buffer))
 
+;;;###autoload
 (defun virtual-dts ()
   "Decompile then view the equivalent `dts' for the current buffer."
   (interactive)
@@ -179,6 +181,7 @@ Value is used when calling `read-only-mode'. See `read-only-mode' for supported 
   ;; Generate the equivalent `dts' for the current `dtb' buffer and switch to it
   (switch-to-buffer (virtual-dts-buffer (buffer-file-name (current-buffer)))))
 
+;;;###autoload
 (defun virtual-dts-to-dtb-before-save ()
   "Convert a `dts' representation of a `dtb' back to binary format before saving."
   ;; Protect against I/O errors
@@ -198,6 +201,7 @@ Value is used when calling `read-only-mode'. See `read-only-mode' for supported 
       (set-buffer-modified-p t)))
   nil)
 
+;;;###autoload
 (defun virtual-dts-to-dtb-after-save ()
   "Restore the buffer position and mode after saving."
 
@@ -220,6 +224,7 @@ Value is used when calling `read-only-mode'. See `read-only-mode' for supported 
   (add-hook 'write-file-functions #'virtual-dts-to-dtb-before-save nil t)
   (add-hook 'after-save-hook #'virtual-dts-to-dtb-after-save nil t))
 
+;;;###autoload
 (defun virtual-dts-mode-exit ()
   "Restore virtual-dts-mode when switching to another mode."
 
