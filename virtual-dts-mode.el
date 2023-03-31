@@ -55,6 +55,12 @@
   "If the standard error output of `dtc' should be displayed."
   :type 'boolean
   :group 'virtual-dts)
+(defcustom virtual-dts-readonly nil
+  "If virtual-dts buffers should be opened read-only by default.
+
+Value is used when calling `read-only-mode'. See `read-only-mode' for supported values."
+  :type 'boolean
+  :group 'virtual-dts)
 
 (defun virtual-dts-buffer (file)
   "Convert a `dtb' FILE to a `dts' buffer."
@@ -208,7 +214,7 @@
     (erase-buffer)
     (insert-buffer-substring (virtual-dts-buffer (buffer-file-name (current-buffer))))
     (set-buffer-modified-p nil)
-    (read-only-mode 1))
+    (read-only-mode virtual-dts-readonly))
 
   (add-hook 'change-major-mode-hook #'virtual-dts-mode-exit nil t)
   (add-hook 'write-file-functions #'virtual-dts-to-dtb-before-save nil t)
