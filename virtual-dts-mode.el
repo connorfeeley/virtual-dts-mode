@@ -127,9 +127,6 @@
                                 :stderr stderr
                                 :coding 'binary
                                 :connection-type 'pipe
-                                ;; :file-handler (lambda (process output)
-                                ;;                 (with-current-buffer (process-buffer process)
-                                ;;                   (insert output)))
                                 ))
          (stderr-process (get-buffer-process stderr)))
 
