@@ -5,8 +5,8 @@
 ;; Author: Connor Feeley <git@cfeeley.org>
 ;; Maintainer: Connor Feeley <git@cfeeley.org>
 ;; Created: December 8, 2022
-;; Modified: February 28, 2023
-;; Version: 1.0.0
+;; Modified: March 31, 2023
+;; Version: 1.1.0
 ;; Keywords: dts, languages, tools, unix, hardware
 ;; Homepage: https://sr.ht/~cfeeley/virtual-dts-mode/
 ;; Package-Requires: ((emacs "26.1") (dts-mode "1.0"))
